@@ -1,0 +1,78 @@
+
+
+<div id="login-modal" class="modal hide fade" style="display: none; ">
+  <div class="modal-header">
+    <a href="#" class="close">×</a>
+    <h4><%= t :login_with_account %></h4>
+  </div>
+  <div>
+    <ul class="tabs" style="margin: 15px;">
+      <li class="active"><a href="#login"><%= t :log_in %></a></li>
+      <li><a href="#register"><%= t :sign_up %></a></li>
+    </ul>
+     
+    <div class="pill-content">
+      <div class="active" id="login">
+        <%= form_tag "/auth/identity/callback", style: 'margin-bottom: 0;' do %>
+          <div class="modal-body">
+            <div class="clearfix">
+              <%= label_tag :auth_key, t(:email) %>
+              <div class="input">
+                <%= text_field_tag :auth_key, @identity.try(:email) %>
+              </div>
+            </div>
+            <div class="clearfix">
+              <%= label_tag :password %>
+              <div class="input">
+                <%= password_field_tag :password, t(:password) %>
+              </div>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <%= submit_tag t(:log_in), class: 'btn primary' %>
+          </div>
+        <% end %>
+      </div>
+      <div id="register">
+        <%= form_tag "/auth/identity/register", style: 'margin-bottom: 0;' do %>
+          <div class="modal-body">
+            <div class="clearfix">
+              <%= label_tag :name, t(:name) %>
+              <div class="input">
+                <%= text_field_tag :name, @identity.try(:name) %>
+              </div>
+            </div>
+            <div class="clearfix">
+              <%= label_tag :email, t(:email) %>
+              <div class="input">
+                <%= text_field_tag :email, @identity.try(:email) %>
+              </div>
+            </div>
+            <div class="clearfix">
+              <%= label_tag :password, t(:password) %>
+              <div class="input">
+                <%= password_field_tag :password %>
+              </div>
+            </div>
+            <div class="clearfix">
+              <%= label_tag :password_confirmation, t(:password_confirmation) %><br>
+              <div class="input">
+                <%= password_field_tag :password_confirmation %>
+              </div>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <%= submit_tag t(:sign_up), class: 'btn primary' %>
+          </div>
+        <% end %>
+      </div>
+    </div>
+     
+    <script>
+      $(function () {
+        $('.tabs').tabs()
+      })
+    </script>
+  </div>
+</div>
+        

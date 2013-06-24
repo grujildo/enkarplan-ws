@@ -1,0 +1,11 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
+
+one:
+  description: MyString
+  key: MyString
+  calls_count: 1
+
+two:
+  description: MyString
+  key: MyString
+  calls_count: 1

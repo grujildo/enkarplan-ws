@@ -1,0 +1,142 @@
+<div id="last-photos-slider">
+  <h3 id="last-photos"><%= t :last_photos %></h3>
+  <%= javascript_include_tag "slider" %>
+  <div class="slider">
+    <div id="gallery">
+      <% @last_photos.each do |photo| %>
+        <%= image_tag photo.image.url(:gallery), 'data-url' => poi_url(photo.poi), 'data-title' => photo.poi.title, 'data-description' => truncate(photo.poi.description) %>
+      <% end %>
+    </div>
+    <div id="thumbs">
+      <% @last_photos.each do |photo| %>
+        <%= image_tag photo.image.url(:thumb) %>
+      <% end %>  
+    </div>
+  </div>
+</div>
+
+<div id="pois-previews" class="row" style="margin-top: 32px;">
+  <div class="span11">
+    
+    <div class="verfied">
+      <div class="events-list">
+        <ul>
+          <%= render @verfied %>
+        </ul>
+      </div>
+    </div>
+    <div class="view-all-button">
+      <%= link_to t(:view_all), '/all', class: 'btn primary span3' %>
+    </div>
+  
+    <div id="last-added">
+      <h3 id="last-pois"><%= t :last_pois %></h3>
+      <div class="events-list">
+        <ul>
+          <%= render @last_pois %>
+        </ul>
+      </div>
+    </div>
+    <div id="top-rated">
+      <h3 id="top-rated-pois"><%= t :top_rated %></h3>
+      <div class="events-list">
+        <ul>
+          <%= render @top_pois %>
+        </ul>
+      </div>
+    </div>
+  
+  </div>
+  <div class="span5">
+    <div id="create-poi">
+      <% unless current_user && current_user.is_banned %>
+        <h3 id="contribute"><%= t :contribute %></h3>
+        <center>
+          <% if current_user %>
+            <%= link_to t(:create_poi), new_poi_path, class: 'btn success span4' %>
+          <% else %>
+            <p><%= t :login_to_create %></p>
+          <% end %>
+        </center>
+        <% end %>
+    </div>
+    <div>
+      <h3 id="last-comments"><%= t :last_comments %></h3>
+      <ul id="last-comments">
+        <% @last_comments.each do |comment| %>
+          <% if comment.poi %>
+          <li>
+            <%= link_to truncate(comment.comment, length: 80), comment_url(comment), class: 'last-comment' %>
+            <%= link_to comment.poi.title, poi_url(comment.poi), class: 'last-comment-poi' if comment.poi %>
+          </li>
+          <% end %>
+        <% end %>
+      </ul>
+    </div>
+    
+    <div>
+      <h3 id="events"><%= t :next_events %></h3>
+      <!--
+      <div class="google-calendar-events">
+        <iframe src="https://www.google.com/calendar/b/0/embed?showTitle=0&showTabs=0&showTz=0&height=400&wkst=2&bgcolor=%23FFFFFF&src=zalla.org_bhfbtue1pklla91t4u97m9ggno%40group.calendar.google.com&color=%2342104A&src=zalla.org_j2njaqb2eapip42l32br00afgo%40group.calendar.google.com&color=%232F6309&src=zalla.org_5up3mopev5gkg9k17rcijrj0p4%40group.calendar.google.com&color=%23113F47&ctz=Europe%2FMadrid" width="280" height="400" frameborder="0"></iframe>
+      </div>
+      -->
+      <ul>
+        <% @next_events.each do |event| %>
+          <li>
+            <%= link_to truncate(event.summary ? event.summary : event.description, length: 100), "/sitios/#{event.poi.slug}?event=#{event.id}"  %><br>
+            <%= link_to event.poi.title, poi_url(event.poi), style: 'color: #888;' %>
+            <div class="event-time-range">
+              <%= time_tag event.starts_at %> - <%= time_tag event.ends_at %>
+            </div>
+          </li>
+        <% end %>
+      </ul>
+    </div>
+  </div>
+  
+  <div id="near" class="span16">
+    <h3 id="map-near"><%= t :near %></h3>
+    <div id="map-canvas" style="height: 300px; width: 1010px; margin-left: -25px;"></div>
+    <script>
+      var poi_types = <%= Hash[PoiType.all.map {|poi| [poi.id, poi]}].to_json.html_safe %>;
+
+      <% pois_json = Poi.order('created_at desc').limit(50).collect do |poi| 
+          { poi_type_id: poi.poi_type_id, latitude: poi.latitude, longitude: poi.longitude, slug: poi.slug, title: poi.title, description: truncate(poi.description_plain) }
+        end %>
+    
+      var pois = <%= pois_json.to_json.html_safe %>;
+      
+    </script>
+    <%= javascript_include_tag "http://maps.googleapis.com/maps/api/js?sensor=false" %>
+    <%= javascript_include_tag "near-pois-map" %>
+    
+    <a href="#map-canvas" class="map-expand"><center>&darr;</center></a>
+    <script>
+      var mapExpanded = false;
+      $("a.map-expand").click(function() {
+        $('#map-canvas').animate({
+          height: mapExpanded ? 300 : 600
+        }, {
+        	duration: 300,
+        	easing: "swing",
+        	complete: function(){
+        	  google.maps.event.trigger(map, "resize");
+        	  $("a.map-expand > center").text(mapExpanded ? '↑' : '↓');
+        	}
+        });
+        
+        $("html, body").animate({
+      		scrollTop: $($(this).attr("href")).offset().top + "px"
+      	}, {
+      		duration: 300,
+      		easing: "swing"
+      	});
+
+        mapExpanded = !mapExpanded;
+        return false;
+      });
+    </script>
+  </div>
+</div>
+

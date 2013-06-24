@@ -1,0 +1,150 @@
+<script type="text/javascript" src="/tiny_mce/jquery.tinymce.js"></script>
+<script type="text/javascript">
+	$().ready(function() {
+		$('textarea.rich').tinymce({
+			// Location of TinyMCE script
+			script_url : '/tiny_mce/tiny_mce.js',
+
+			// General options
+			theme : "advanced",
+			plugins : "autolink,lists,pagebreak,style,layer,table,save,advhr,advimage,advlink,emotions,iespell,inlinepopups,insertdatetime,preview,media,searchreplace,print,contextmenu,paste,directionality,fullscreen,noneditable,visualchars,nonbreaking,xhtmlxtras,template,advlist",
+
+			// Theme options
+			theme_advanced_buttons1 : "bold,italic,underline,strikethrough,|,justifyleft,justifycenter,justifyright,justifyfull,styleselect,formatselect,fontselect,fontsizeselect",
+			theme_advanced_buttons2 : "cut,copy,paste,pastetext,pasteword,|,search,replace,|,bullist,numlist,|,outdent,indent,blockquote,|,undo,redo,|,link,unlink,anchor,image,cleanup,help,code,|,insertdate,inserttime,preview,|,forecolor,backcolor",
+			theme_advanced_buttons3 : "charmap,emotions,iespell,media,advhr,|,print,|,ltr,rtl,|,fullscreen",
+			//theme_advanced_buttons4 : "insertlayer,moveforward,movebackward,absolute,|,styleprops,|,cite,abbr,acronym,del,ins,attribs,|,visualchars,nonbreaking,template,pagebreak",
+			theme_advanced_toolbar_location : "top",
+			theme_advanced_toolbar_align : "left",
+			theme_advanced_statusbar_location : "bottom",
+			theme_advanced_resizing : true,
+
+			// Example content CSS (should be your site CSS)
+			content_css : "css/content.css",
+
+			// Drop lists for link/image/media/template dialogs
+			template_external_list_url : "lists/template_list.js",
+			external_link_list_url : "lists/link_list.js",
+			external_image_list_url : "lists/image_list.js",
+			media_external_list_url : "lists/media_list.js",
+
+			// Replace values for the template plugin
+			template_replace_values : {
+				username : "Some User",
+				staffid : "991234"
+			}
+		});
+	});
+</script>
+
+
+<%= form_for(@poi, html: {multipart: true}) do |f| %>
+  <fieldset>
+    <% if @poi.errors.any? %>
+      <div id="error_explanation">
+        <h2><%= pluralize(@poi.errors.count, "error") %> prohibited this poi from being saved:</h2>
+  
+        <ul>
+        <% @poi.errors.full_messages.each do |msg| %>
+          <li><%= msg %></li>
+        <% end %>
+        </ul>
+      </div>
+    <% end %>
+  
+    <div class="clearfix">
+      <%= f.label t(:poi_title) %>
+      <div class="input">
+        <%= f.text_field :title, class: 'span8' %>
+      </div>
+    </div>
+    
+    <% if current_admin_user %>
+      <div class="clearfix">
+        <%= f.label t(:poi_title)+"(EU)" %>
+        <div class="input">
+          <%= f.text_field :title_eu, class: 'span8' %>
+        </div>
+      </div>
+    <% end %>
+    
+    
+    <div class="clearfix">
+      <%= f.label t(:poi_description) %>
+      <div class="input">
+        <%= f.text_area :description, class: 'span8 rich', rows: 15 %>
+      </div>
+    </div>
+    <% if current_admin_user %>
+      <div class="clearfix">
+        <%= f.label t(:poi_description)+"(EU)" %>
+        <div class="input">
+          <%= f.text_area :description_eu, class: 'span8 rich', rows: 15 %>
+        </div>
+      </div>
+    <% end %>
+    
+    <div class="clearfix">
+      <%= f.label t(:poi_type) %>
+      <div class="input">
+        <%= f.select :poi_type_id, PoiType.where(is_special: false).collect {|t| [ t.localized_name(session[:locale]), t.id ] }, {}, { id: 'type-select' } %>
+      </div>
+      <br/>
+      <div id="poi-type-image" class="input"></div>
+    </div>
+    
+    <%= f.hidden_field :latitude, id: 'poi-latitude' %>
+    <%= f.hidden_field :longitude, id: 'poi-longitude' %>
+    
+    <div id="route-points" style="display: none;">
+    </div>
+    
+    <div class="clearfix">
+      <h6><%= t(:location) %></h6>
+      <div class="row" style="margin: -25px;">
+        <div id="map-canvas" style="width: 1010px; height: 450px; display: block;"></div> 
+      </div>
+      <span id="route-help" class="help-block"><%= t :route_help %></span>
+    </div>
+    
+    <script>
+      var poiType;
+      
+      function updatePoiType(type) {
+        poiType = type;
+        poiTypeChanged();
+        $('#upload-photo-button').css('display', poiType.is_route ? 'block' : 'none');
+        $('#poi-type-image').append('<img id="poi-type-img" src="'+poiType.image_urls.med+'" />');
+      }
+      
+      $(function(){
+        updatePoiType(<%= PoiType.first.to_json.html_safe %>);
+      });
+      
+      
+      $('select#type-select').change(function(){
+        $('img#poi-type-img').remove();
+        $.getJSON('/poi_types/'+this.value+'.json', function(data) {
+          updatePoiType(data);
+        });
+      });
+      
+    </script>
+    
+    <%= javascript_include_tag "http://maps.googleapis.com/maps/api/js?sensor=false" %>
+    <%= javascript_include_tag "new-poi-map" %>
+    
+    <!--
+    <div class="clearfix">
+      <%= f.label t(:gpx_file) %>
+      <div class="input">
+        <input id="gpx_file" name="gpx_file" type="file">
+      </div>
+    </div>
+    -->
+  </fieldset>
+  
+  <div class="actions">
+    <%= f.submit t(:submit_poi), class: 'btn primary' %>
+  </div>
+<% end %>

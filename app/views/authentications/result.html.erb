@@ -1,0 +1,9 @@
+<script>
+function authenticationResult() {
+  <% if !@errors %>
+    return JSON.stringify(<%= { user_id: @user.id, user_name: @user.name, uid: @authentication.uid, provider: @authentication.provider }.to_json.html_safe %>);
+  <% else %>
+    return JSON.stringify({error:<%= @errors.to_json.html_safe %>});
+  <% end %>
+}
+</script>

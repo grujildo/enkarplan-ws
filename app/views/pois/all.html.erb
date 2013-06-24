@@ -1,0 +1,83 @@
+<div id="all-pois-row" class="row">
+  <div class="span11">
+    <h3 id="all-pois"><%= t :all %></h3>
+    <div class="events-list">
+      <ul id="pois-list">
+        <%= render @pois %>
+        <div id="infinite-scroll"></div>
+      </ul>
+      <script>
+      /*
+       *Endless scrolling
+       */
+      var page = 2, stopScrolling = false;
+      var param_type = <%= params[:type] || 'null' %>;
+      var param_order = <%= params[:order] || 'null' %>;
+      var param_title = "<%= params[:title] || '' %>";
+      var options = {
+        fireOnce: true,
+        fireDelay:400,
+        bottomPixels: 300,
+        ceaseFire: function() {
+          return stopScrolling;
+        },
+        callback: function(){
+          $.ajax({
+            url: '/all.js',
+            data: { page: page, type: param_type, order: param_order, title: param_title },
+            dataType: 'script'
+          });
+        }
+      };
+      $(function() {
+        $(document).endlessScroll(options);
+      });
+      /*
+       * Fixed menu
+       */
+      $(document).ready(function () {  
+        var top = $('#search').offset().top - parseFloat($('#search').css('marginTop').replace(/auto/, 0));
+        $(window).scroll(function (event) {
+          // what the y position of the scroll is
+          var y = $(this).scrollTop();
+        
+          // whether that's below the form
+          if (y >= top) {
+            $('#search').css('top', y-130);
+          } else {
+            $('#search').css('top', 0);
+          }
+        });
+      });
+      </script>
+    </div>
+  </div>
+  <div class="span5" id="search-container">
+    <div class="span5" id="search">
+      <h3><%= t :search %></h3>
+      <%= form_tag '/all', method: 'get', class: 'form-stacked' do %>
+        <div class="clearfix">
+          <%= label_tag :title, t(:search) %>
+          <div class="input">
+            <%= text_field_tag :title %>
+          </div>
+        </div>
+        <div class="clearfix">
+          <%= label_tag :type, t(:poi_type) %>
+          <div class="input">
+            <%= select_tag :type, options_from_collection_for_select(PoiType.all, :id, :name, { include_blank: true }) %>
+          </div>
+        </div>
+        <div class="clearfix">
+          <%= label_tag :order, t(:order) %>
+          <div class="input">
+            <%= select_tag :order, "<option value=0>#{t :creation_date}</option><option value=1>#{ t :top_rated}</option>".html_safe %>
+          </div>
+        </div>
+        <div class="actions">
+          <%= submit_tag t(:filter), class: 'btn primary' %>
+        </div>
+      <% end %>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Enkarplan</title>
+  <link rel="shortcut icon" href="/assets/favicon.png" type="image/png">
+  <%= stylesheet_link_tag    "application" %>
+  <%= stylesheet_link_tag    params[:controller] %>
+  <%= javascript_include_tag "application" %>
+  <%= javascript_include_tag params[:controller] %>
+  <%= csrf_meta_tags %>
+  <%= render partial: 'application/piwik-tracking' %>
+</head>
+<body>
+<div id="content">
+  <div class="wrapper" id="container">
+    <div id="header">
+      <div id="lang-selector">
+        <%= link_to 'eu', url_for(locale: 'eu') %>
+        <%= link_to 'es', url_for(locale: 'es') %>
+      </div>
+      <div id="session">
+      <% if current_user %>
+        <%= current_user.name %> (<a href="/authentications/sign_out">Desconectar</a>)
+      <% else %>
+        <a href="#" id="sign-in" rel="popover" data-content="<p><a href='/auth/twitter'><%= t :login_twitter %></a></p><p><a href='/auth/facebook'><%= t :login_facebook %></a></p><p><a href='/auth/google_oauth2'><%= t :login_google %></a></p><p><a  data-controls-modal='login-modal' data-backdrop='static'><%= t :login_zalla %></a></p>" data-original-title="<%= t :log_in %>"><%= t :sign_in_now %></a>
+        <%= render partial: 'application/login-modal' %>
+      <% end %>
+
+      </div>
+      <a href="/" class="logo">Enkarplan</a>
+      <script>
+        $('#sign-in').popover({delayOut: 8000, placement: 'below', html: true, trigger: 'hover'});
+      </script>
+    </div>
+    
+    <% if @identity && @identity.errors.any? %>
+      <div class="error_messages">
+        <h2><%= pluralize(@identity.errors.count, "error") %> prohibited this account from being saved:</h2>
+        <ul>
+        <% @identity.errors.full_messages.each do |msg| %>
+          <li><%= msg %></li>
+        <% end %>
+        </ul>
+      </div>
+    <% end %>
+    
+    <%= yield %>
+  </div>
+</div>
+
+<div id="footer">
+  <div class="wrapper">
+    
+    <div class="row">
+      <div class="span4" style="margin-top: 10px;">
+        <a href="http://itunes.apple.com/es/app/enkarplan/id496807316">
+          <img src="/assets/app-store-logo.png" />
+        </a>
+        <a href="https://market.android.com/details?id=org.enkarplan">
+          <img src="/assets/available-on-android.png" style="margin-top: 25px;" />
+        </a>
+      </div>
+      <div class="span3" style="margin: 0px 0 20px; padding-left: 25px;">
+
+      </div>
+      <div class="span4" style="margin-top: 0; padding-left: 35px;">
+        <a href="http://www.enkarterri.org">
+          <img src="/assets/enkarplan-logo.png" />
+        </a>
+      </div>
+      <div class="span4" style="margin-top: 20px;">
+        <a href="http://www.enkartur.net">
+          <img src="/assets/enkartur-logo.png" style="margin-top: 20px;" />
+        </a>
+      </div>
+    </div>
+    
+    <div id="copyright">
+      <center>
+        <p><%= t :copyright %>
+          <a href='ma&#105;lto&#58;inf%6F&#64;z&#97;lla&#37;2&#69;%6&#70;rg'>&#105;nfo&#64;enkarplan&#46;&#111;rg</a> 
+        | Desarrollo <a href="http://www.bidenet.com">Bidenet</a>
+        </p>
+      </center>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>

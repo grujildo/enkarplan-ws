@@ -1,0 +1,25 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
+
+one:
+  title: MyString
+  description: MyText
+  user_id: 1
+  posted_at: 2011-12-22 23:26:47
+  updated_at: 2011-12-22 23:26:47
+  type: 1
+  latitude: 9.99
+  longitude: 9.99
+  rating: 9.99
+  ratings_count: 1
+
+two:
+  title: MyString
+  description: MyText
+  user_id: 1
+  posted_at: 2011-12-22 23:26:47
+  updated_at: 2011-12-22 23:26:47
+  type: 1
+  latitude: 9.99
+  longitude: 9.99
+  rating: 9.99
+  ratings_count: 1

@@ -1,0 +1,239 @@
+<p id="notice"><%= notice %></p>
+
+<h3 style="background: #f5f5f5 url('<%= @poi.poi_type.image.url(:small) if @poi.poi_type && @poi.poi_type.image %>') no-repeat right center;"><%= @poi.localized_title session[:locale] %>
+
+  <div class="rating" style="float: right; margin-right: 28px;">
+    <div class="poi-rating" data="<%= @poi.rating * 2 %>" style="display: inline-block; margin-left: 8px;"></div>
+    <script type="text/javascript">
+      $(document).ready(function(){
+        $(".poi-rating").jRating({
+    	    showRateInfo:false,
+    	    poiId: "<%= @poi.id %>",
+    	    type: 'gray'
+    	  });
+      });
+    </script>
+  </div>
+  
+</h3>
+
+<div class="row">
+  <div id="map-canvas" style="width: 1010px; height: 400px; margin: 22px 0 30px -5px; display: block; clear: both;"></div>
+  
+  <script>
+    var poi = <%= @poi.to_json.html_safe %>;
+  </script>
+  <%= javascript_include_tag "http://maps.googleapis.com/maps/api/js?sensor=false" %>
+  <%= javascript_include_tag "show-poi-map" %>
+</div>
+
+<div class="row">
+  <div class="span11">
+    <% if @event %>
+      <div class="event-details" style="border-bottom: 1px solid #888; margin-bottom: 25px;">
+        
+        <h3 id="events">
+          <% if @event.summary && @event.summary.length > 0 %>
+            <%= @event.summary %>
+          <% else %>
+            <%= "#{t :next_event_message} - #{@poi.localized_title session[:locale]}" %>
+          <% end %>
+        </h3>
+        <%= auto_link(simple_format(@event.description), html: { target: '_blank' }) %>
+        
+      </div>
+    <% end %>
+    <%= time_tag @poi.created_at %>
+    <div>
+      <%= @poi.localized_description(session[:locale]).html_safe %>
+    </div>
+  </div>
+  
+  <div class="span5">
+    <% if current_admin_user %>
+      <h3>Administración</h3>
+      <%= link_to "Editar", poi_url(@poi) + "/edit", class: 'btn' %>
+      <%= link_to "Eliminar", poi_url(@poi), class: 'btn danger', confirm: '¿Esta seguro?', method: 'delete' %>
+    <% end %>
+    <div class="poi-qr-code">
+      <h3><%= t :download_qr %></h3>
+      <%= image_tag "http://qrcode.kaywa.com/img.php?s=6&d=enkarplan://#{@poi.id}", style: 'margin: 0 auto;' %>
+    </div>
+    <div id="poi-photos">
+      <h3 id="last-photos"><%= t :photos %></h3>
+      <%= javascript_include_tag "jquery.fancybox-1.3.4.pack" %>
+      <%= javascript_include_tag "jquery.mousewheel-3.0.4.pack" %>
+      
+      <% @poi.photos.each do |photo| %>
+        <script>
+      		$(document).ready(function() {
+      			$("a#fancybox-<%= photo.id %>").fancybox({
+        				overlayShow: false,
+        				transitionIn: 'elastic',
+        				transitionOut: 'elastic'
+        			});
+      			});
+        </script>
+        <%= link_to image_tag(photo.image.url(:thumb)), photo.image.url(:full), id: "fancybox-#{photo.id}" %>
+      <% end %>
+      <div>
+        <script>
+          function showForm(){
+            $('#upload-photo-button').css('display', 'none');
+            $('#upload-photo-form').fadeToggle();
+          }
+        </script>
+        <a href="#" id="upload-photo-button" class="btn" onClick="showForm(); return false"><%= t :upload_photos %></a>
+        <form accept-charset="UTF-8" action="/photos" class="new_photo" enctype="multipart/form-data" id="upload-photo-form" method="post" style="display:  none;">
+          <input id="photo_poi_id" name="photo[poi_id]" type="hidden" value="<%= @poi.id %>">
+          <input id="photo_image" name="photo[image]" type="file">
+          <input name="commit" class="btn" type="submit" value="<%= t :create_photo %>">
+        </form>
+      </div>
+    </div>
+    
+    <% if @events.count > 0 || @poi.user == current_user %>
+    <div id="poi-events">
+      <h3 id="events"><%= t :events %></h3>
+      <% if @poi.user && @poi.user == current_user %>
+        <script>
+          function showEventForm(){
+            $('#create-event-button').css('display', 'none');
+            $('#new-event').fadeToggle();
+          }
+        </script>
+        
+        <a href="#" id="create-event-button" class="btn" onClick="showEventForm()"><%= t :create_event %></a>
+        <div id="new-event" style="display: none;">
+          <h6>Crea un nuevo Evento</h6>
+          <%= javascript_include_tag "anytimec" %>
+          <form accept-charset="UTF-8" action="/events" class="form-stacked" method="post">
+            <div class="clearfix">
+              <%= label_tag :description, t(:description) %>
+              <input type="text" id="event_description" class="span4" />
+            </div>
+            <div class="clearfix">
+              <%= label_tag :starts_at, t(:starts_at) %>
+              <input type="text" id="starts_at_date" class="span2" name="event[starts_at][date]" value="<%= Time.now.strftime '%d/%m/%Y' %>" />
+              <input type="text" id="starts_at_time" class="span2" name="event[starts_at][time]" value="<%= Time.now.strftime '%H:%M' %>" />
+              <script>
+                AnyTime.picker("starts_at_date", { 
+                  format: "%d/%m/%z", 
+                  firstDOW: 1, 
+                  labelTitle: "Fecha",
+                  labelDayOfMonth: "Dia del mes", 
+                  labelMonth: "Mes", 
+                  labelYear: "Año",
+                  dayNames: ["L", "M", "X", "J", "V", "S", "D"]
+                });
+                AnyTime.picker("starts_at_time", { 
+                  format: "%H:%i", 
+                  labelTitle: "Hora",
+                  labelHour: "Hora", 
+                  labelMinute: "Minuto" 
+                });
+              </script>
+            </div>
+            <div class="clearfix">
+              <%= label_tag :ends_at, t(:ends_at) %>
+              <input type="text" id="ends_at_date" class="span2" name="event[ends_at][date]" value="<%= Time.now.strftime '%d/%m/%Y' %>" />
+              <input type="text" id="ends_at_time" class="span2" name="event[ends_at][time]" value="<%= Time.now.strftime '%H:%M' %>" />
+              <script>
+                AnyTime.picker("ends_at_date", { 
+                  format: "%d/%m/%z", 
+                  firstDOW: 1, 
+                  labelTitle: "Fecha",
+                  labelDayOfMonth: "Dia del mes", 
+                  labelMonth: "Mes", 
+                  labelYear: "Año",
+                  dayNames: ["L", "M", "X", "J", "V", "S", "D"]
+                });
+                AnyTime.picker("ends_at_time", { 
+                  format: "%H:%i", 
+                  labelTitle: "Hora",
+                  labelHour: "Hora", 
+                  labelMinute: "Minuto" 
+                });
+              </script>
+            </div>
+            <input id="event_poi_id" name="event[poi_id]" type="hidden" value="<%= @poi.id %>">
+            <div class="clearfix">
+              <input type="submit" class="btn" value="Enviar" />
+            </div>
+          </form>
+        </div>
+      <% end %>
+      <ul>
+        <% @events.each do |event| %>
+          <li>
+            <%= link_to truncate(event.summary ? event.summary : event.description, length: 100), "/sitios/#{@poi.slug}?event=#{event.id}"  %><br>
+            <div class="event-time-range">
+              <%= time_tag event.starts_at %> - <%= time_tag event.ends_at %>
+            </div>
+          </li>
+        <% end %>
+      </ul>
+    </div>
+    <% end %>
+  </div>
+</div>
+
+<div id="poi-comments" class="span11">
+<h3 id="last-comments"><%= t :comments %></h3>
+    <script>
+    function publishComment(){
+      var comment = $("#comment-content").val();
+      $.post('/comments.json',{
+  				comment : {
+  				  comment: comment,
+  				  poi_id: <%= @poi.id %>
+  				}
+  			},
+  			function(comment) {
+  				if(!comment.error){
+            // Add comment to comments list
+            $('ul#comments-list').prepend(
+            '<li><p>'+comment.comment+'</p><div class="comment-info"><p><span><%= current_user.name if current_user %></span></p><time>Ahora</time></div></li>').fadeIn();
+            $("#comment-content").val('')
+              .attr('rows',1);
+            $('#publish').css('display', 'none');
+  				}else{
+  				}
+  			},
+  			'json'
+  		);
+    }
+    jQuery(function($){
+      $('#comment-content').focus(function(){
+        $(this).attr('rows',5);
+        $('#publish').css('display', 'inline-block');
+      }).blur(function(){
+        if ($(this).val() == '') {
+          $(this).attr('rows',1);
+          $('#publish').css('display', 'none');
+        }
+      });
+    });
+  </script>
+  
+  <div id="new-comment">
+    <textarea id="comment-content" placeholder="<%= raw t(:add_your_comment) %>" class="span9" rows=1></textarea>
+    <a id="publish" class="btn primary" style="display: none;" href="#poi-comments" onClick="publishComment()"><%= t :publish %></a>
+  </div>
+  <ul id="comments-list">
+    <% if @poi.comments.count == 0 %>
+      <li><%= t :no_comments %></li>
+    <% else %>
+      <% @poi.comments.order('created_at desc').each do |comment| %>
+        <li id="comment-<%= comment.id %>">
+          <%= simple_format comment.comment %>
+          <div class="comment-info">
+            <p class="comment-user"><%= comment.user ? simple_format(comment.user.name) : t(:unknown) %></p>
+            <%= time_tag comment.created_at %>
+          </div>
+        </li>
+      <% end %>  
+    <% end %>  
+  </ul>
+  
+</div>

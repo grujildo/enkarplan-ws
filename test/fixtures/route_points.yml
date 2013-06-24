@@ -1,0 +1,13 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
+
+one:
+  poi_id: 1
+  index: 1
+  latitude: 9.99
+  longitude: 9.99
+
+two:
+  poi_id: 1
+  index: 1
+  latitude: 9.99
+  longitude: 9.99
