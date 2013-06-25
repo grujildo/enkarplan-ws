@@ -24,7 +24,7 @@ function createMarker(poi) {
 function initialize() {
   var options = {
     scrollwheel: false,
-    zoom: 13,
+    zoom: 11,
     draggableCursor: 'Enkarterri',
     center: new google.maps.LatLng(43.213,-3.13),
     mapTypeId: google.maps.MapTypeId.ROADMAP

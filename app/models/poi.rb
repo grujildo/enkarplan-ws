@@ -3,6 +3,7 @@ class Poi < ActiveRecord::Base
   
   belongs_to :poi_type
   belongs_to :user
+  belongs_to :city
   has_many :photos, :dependent => :delete_all
   has_many :events, :dependent => :delete_all
   has_many :comments, :dependent => :delete_all

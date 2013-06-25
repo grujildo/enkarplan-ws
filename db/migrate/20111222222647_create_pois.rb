@@ -9,7 +9,11 @@ class CreatePois < ActiveRecord::Migration
       t.decimal :longitude
       t.decimal :rating
       t.integer :ratings_count
-
+      t.integer :city_id
+      t.datetime :starts_at
+      t.datetime :ends_at
+      t.string :address
+      
       t.timestamps
     end
   end

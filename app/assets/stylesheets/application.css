@@ -4,11 +4,17 @@
  * the top of the compiled file, but it's generally better to create a new file per style scope.
  *= require bootstrap.min
  *= require_self
+ *= fullcalendar
  */
 
 body {
 }
 
+#calendar {
+		width: 900px;
+		margin: 0 auto;
+		}
+		
 #content {
   background-color: #F0F1F2;
 }
@@ -72,7 +78,7 @@ h3.title {
 #footer {
   display: block;
   color: white;
-  background-color: rgb(0, 125, 203);
+  background-color: #326f32;
   border-top: 3px solid rgb(125, 185, 0);
   height:  225px;
   min-width: 1010px;
@@ -81,8 +87,8 @@ h3.title {
 
 #footer #copyright {
   text-transform: uppercase;
-  border-top:  1px solid rgb(77, 164, 219);
-  border-bottom:  1px solid rgb(77, 164, 219);
+  border-top:  1px solid #e5ede5;
+  border-bottom:  1px solid #e5ede5;
 }
 
 #footer #copyright p {

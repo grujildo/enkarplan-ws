@@ -26,7 +26,7 @@
       </div>
     </div>
     <div class="view-all-button">
-      <%= link_to t(:view_all), '/all', class: 'btn primary span3' %>
+      <%= link_to t(:view_all), '/eventos', class: 'btn primary span3' %>
     </div>
   
     <div id="last-added">
@@ -53,7 +53,7 @@
         <h3 id="contribute"><%= t :contribute %></h3>
         <center>
           <% if current_user %>
-            <%= link_to t(:create_poi), new_poi_path, class: 'btn success span4' %>
+            <%= link_to t(:create_event), new_poi_path, class: 'btn success span4' %>
           <% else %>
             <p><%= t :login_to_create %></p>
           <% end %>

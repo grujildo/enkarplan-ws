@@ -1,4 +1,6 @@
 Enkarplan::Application.routes.draw do
+  resources :cities
+
   ActiveAdmin.routes self
 
   devise_for :admin_users, ActiveAdmin::Devise.config
@@ -20,9 +22,11 @@ Enkarplan::Application.routes.draw do
 
   resources :comments
 
-  match '/all', to: 'pois#all'
+  match '/eventos', to: 'pois#all'
   
   match '/pois/last_updates', to: 'pois#last_updates'
+  
+  match '/calendario', to: 'pois#calendar'
   
   localized do
     resources :pois

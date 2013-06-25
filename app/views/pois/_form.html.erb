@@ -67,14 +67,62 @@
         </div>
       </div>
     <% end %>
-    
-    
+     
     <div class="clearfix">
       <%= f.label t(:poi_description) %>
       <div class="input">
         <%= f.text_area :description, class: 'span8 rich', rows: 15 %>
       </div>
     </div>
+    
+        <div class="clearfix">
+          <%= javascript_include_tag "anytimec" %>
+
+              <%= f.label t(:starts_at) %>
+              <input type="text" id="starts_at_date" class="span2" name="event[starts_at][date]" value="<%= Time.now.strftime '%d/%m/%Y' %>" />
+              <input type="text" id="starts_at_time" class="span2" name="event[starts_at][time]" value="<%= Time.now.strftime '%H:%M' %>" />
+              <script>
+                AnyTime.picker("starts_at_date", { 
+                  format: "%d/%m/%z", 
+                  firstDOW: 1, 
+                  labelTitle: "Fecha",
+                  labelDayOfMonth: "Dia del mes", 
+                  labelMonth: "Mes", 
+                  labelYear: "Año",
+                  dayNames: ["L", "M", "X", "J", "V", "S", "D"]
+                });
+                AnyTime.picker("starts_at_time", { 
+                  format: "%H:%i", 
+                  labelTitle: "Hora",
+                  labelHour: "Hora", 
+                  labelMinute: "Minuto" 
+                });
+              </script>
+            </div>
+            
+            <div class="clearfix">
+              <%= f.label t(:ends_at) %>
+              <input type="text" id="ends_at_date" class="span2" name="event[ends_at][date]" value="<%= Time.now.strftime '%d/%m/%Y' %>" />
+              <input type="text" id="ends_at_time" class="span2" name="event[ends_at][time]" value="<%= Time.now.strftime '%H:%M' %>" />
+              <script>
+                AnyTime.picker("ends_at_date", { 
+                  format: "%d/%m/%z", 
+                  firstDOW: 1, 
+                  labelTitle: "Fecha",
+                  labelDayOfMonth: "Dia del mes", 
+                  labelMonth: "Mes", 
+                  labelYear: "Año",
+                  dayNames: ["L", "M", "X", "J", "V", "S", "D"]
+                });
+                AnyTime.picker("ends_at_time", { 
+                  format: "%H:%i", 
+                  labelTitle: "Hora",
+                  labelHour: "Hora", 
+                  labelMinute: "Minuto" 
+                });
+              </script>
+            </div>
+            
     <% if current_admin_user %>
       <div class="clearfix">
         <%= f.label t(:poi_description)+"(EU)" %>
@@ -88,6 +136,15 @@
       <%= f.label t(:poi_type) %>
       <div class="input">
         <%= f.select :poi_type_id, PoiType.where(is_special: false).collect {|t| [ t.localized_name(session[:locale]), t.id ] }, {}, { id: 'type-select' } %>
+      </div>
+      <br/>
+      <div id="poi-type-image" class="input"></div>
+    </div>
+    
+    <div class="clearfix">
+      <%= f.label t(:city) %>
+      <div class="input">
+        <%= f.select :city, City.all.collect {|t| [ t.localized_name(session[:locale]), t.id ] }, {}, { id: 'type-select' } %>
       </div>
       <br/>
       <div id="poi-type-image" class="input"></div>

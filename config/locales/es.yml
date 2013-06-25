@@ -65,8 +65,10 @@ es:
   filter: "Filtrar"
   order: "Ordenar"
   creation_date: "Fecha de creación"
-  login_to_create: "Accede para crear un sitio"
+  login_to_create: "Accede para crear un evento"
   
   download_qr: "Descargala"
   next_event_message: "Próximo evento"
+  
+  city: "Ciudad"
 

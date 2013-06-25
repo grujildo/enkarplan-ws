@@ -229,4 +229,10 @@ class PoisController < ApplicationController
       format.json { head :ok }
     end
   end
+  
+  #GET pois/calendar
+  def calendar
+    @pois = Poi.all
+    
+  end
 end

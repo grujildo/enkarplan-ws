@@ -64,9 +64,10 @@ gem 'nokogiri'
 gem 'gpx'
 gem 'libxml-ruby'
 gem 'icalendar'
-gem 'without_accents'
 gem 'rails_autolink'
 
 gem 'simple_form'
 gem 'cocoon'
 gem 'friendly_id'
+
+gem 'geocoder'
