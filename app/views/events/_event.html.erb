@@ -1,0 +1,25 @@
+<li class="event">
+  <div class="event-img">
+    <%= image_tag event.photos.first.image.url(:thumb), class: 'event-preview' if event.photos.count > 0 %>
+  </div>
+  <div class="event-content">
+    <h6><%= link_to event.localized_title(session[:locale]), event_url(event) %></h6>
+    
+    <div class="event-rate">
+      <div class="event-rating<%= event.id %>" data="<%= event.rating ? event.rating * 2 : 0%>"></div>
+      <script type="text/javascript">
+        $(document).ready(function(){
+          $(".event-rating<%= event.id %>").jRating({eventId: "<%= event.id %>"});
+        });
+      </script>
+    </div>
+    <div class="event-type-img">
+      <%= image_tag event.poi_type.image.url(:small), class: 'event-list-type' if event.poi_type && event.poi_type.image %>
+    </div>
+    
+    <div class="event-desc">
+      <p><%= truncate(strip_tags(event.localized_description session[:locale]), length: 140).html_safe %></p>
+      <time><%= time_tag event.created_at %></time>
+    </div>
+  </div>
+</li>
