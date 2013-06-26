@@ -12,7 +12,7 @@
 	height:100%;
 }
 .jRatingColor {
-	background-color: rgb(77, 164, 219); /* bgcolor of the stars*/
+	background-color: #DBBE4D; /* bgcolor of the stars*/
 	position:relative;
 	top:0;
 	left:0;
