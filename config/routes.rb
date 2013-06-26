@@ -32,6 +32,7 @@ Enkarplan::Application.routes.draw do
   
   localized do
     resources :pois
+    resources :events
   end
 
   # The priority is based upon order of creation:

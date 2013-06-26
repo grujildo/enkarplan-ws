@@ -4,6 +4,9 @@ module ApplicationHelper
     "/#{t 'resources.pois'}/#{poi.slug}"
   end
 
+  def event_url(event)
+    "/#{t 'resources.events'}/#{event.slug}"
+  end
   
   String.class_eval do
   

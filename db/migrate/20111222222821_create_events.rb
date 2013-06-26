@@ -16,6 +16,7 @@ class CreateEvents < ActiveRecord::Migration
       t.string :slug
       t.string :description
       t.boolean :is_verified
+      t.integer :poi_type_id
 
       t.timestamps
     end

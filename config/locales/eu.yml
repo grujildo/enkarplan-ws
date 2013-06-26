@@ -9,6 +9,7 @@ eu:
   
   resources:
     pois: "lekuak"
+    events: "ekimenak"
     
   path_names:
     new: "berria" 

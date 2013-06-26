@@ -19,7 +19,7 @@ class EventsController < ApplicationController
   # GET /events.json
   def index
   
-    @events = Poi.order('created_at desc').page(params[:page]).per(params[:limit] || 10) 
+    @events = Event.order('created_at desc').page(params[:page]).per(params[:limit] || 10) 
     
     if params[:type]
       @events = @events.where('poi_type_id = ?', params[:type])
@@ -42,25 +42,92 @@ class EventsController < ApplicationController
       format.json { render json: @events }
     end
   end
+  
+  # GET /all
+  # GET /all.js
+  def all
+    params[:order] = params[:order] ? params[:order].to_i : 0
+    
+    @events = Event
+    
+    if params[:title] && !params[:title].empty?
+      search = "%" + params[:title].sub(" ", "%") + "%"
+      @events = @events.where('title like ? OR title_eu like ?', search, search)
+    end
+    
+    if params[:type] && params[:type] != "null"  && !params[:type].empty?
+      @events = Event.where('poi_type_id = ?', params[:type])
+    end
 
-  # GET /events/1.json
-  def show
-    @event = Event.find(params[:id])
+    if params[:order] == 0
+      @events = @events.order('created_at desc')
+    else
+      @events = @events.order('rating desc')
+    end
+    
+    @events = @events.page(params[:page]).per(8) 
 
     respond_to do |format|
-      format.json { render json: @event }
+      format.html # all.html.erb
+      format.js # all.js.erb
     end
   end
 
+  # GET /events/1.json
+  def show
+    @event = Event.find_by_slug(params[:id])
+    if !@event
+      @event = Event.find(params[:id].to_i)
+    end
+    
+    if params[:event]
+      @event = Event.find params[:event]
+    end
+    
+    @events = @event.events.where('ends_at > ?', Time.now).order('starts_at asc')
+
+    respond_to do |format|
+      format.html # show.html.erb
+      format.json { render json: @event }
+    end
+  end
+  
+  # GET /events/event+slug/edit
+  def edit
+    @event = Event.find_by_slug(params[:id])
+    
+   unless current_admin_user || @event.user == current_user
+     redirect_to event_url(@event)
+   end
+  end
+
+  # GET /events/new
+  # GET /events/new.json
+  def new
+    @event = Event.new
+
+    respond_to do |format|
+      format.html # new.html.erb
+      format.json { render json: @event }
+    end
+  end
+  
   # POST /events
   # POST /events.json
   def create
-    @event = Event.new(params[:event])
+    event_hash = params[:event]
+    event_hash[:user_id] = session[:current_user_id]
+    event_hash[:rating] = 0
+    event_hash[:ratings_count] = 0
+    
+    @event = Event.new event_hash
 
     respond_to do |format|
       if @event.save
+        format.html { redirect_to event_url(@event), notice: 'Event was successfully created.' }
         format.json { render json: @event, status: :created, location: @event }
       else
+        format.html { render action: "new" }
         format.json { render json: @event.errors, status: :unprocessable_entity }
       end
     end
