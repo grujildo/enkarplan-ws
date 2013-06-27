@@ -4,6 +4,7 @@ class CreateComments < ActiveRecord::Migration
       t.integer :poi_id
       t.integer :user_id
       t.text :comment
+      t.integer :event_id
 
       t.timestamps
     end

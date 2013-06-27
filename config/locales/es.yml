@@ -9,7 +9,7 @@ es:
   
   resources:
     pois: "sitios"
-    pois: "eventos"
+    events: "eventos"
     
   path_names:
     new: 'nuevo' 

@@ -2,6 +2,7 @@ class City < ActiveRecord::Base
   extend FriendlyId
   
   has_many :pois
+  has_many :events
   
   friendly_id :title, use: :slugged
   

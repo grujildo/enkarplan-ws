@@ -4,6 +4,7 @@ class PoiType < ActiveRecord::Base
     hash_secret: "2L_.##5|!+;&)%T;!R1T)_<)5^1/2k"
     
   has_many :pois
+  has_many :events
   
   def as_json options=nil
       options ||= {}

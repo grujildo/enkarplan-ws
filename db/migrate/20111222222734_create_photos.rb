@@ -3,6 +3,7 @@ class CreatePhotos < ActiveRecord::Migration
     create_table :photos do |t|
       t.integer :poi_id
       t.integer :user_id
+      t.integer :event_id
 
       t.timestamps
     end

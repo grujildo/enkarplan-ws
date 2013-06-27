@@ -4,7 +4,7 @@
  *= require anytimec
  */
 
-// Place all the styles related to the pois controller here.
+// Place all the styles related to the events controller here.
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: http://sass-lang.com/
 
@@ -53,7 +53,7 @@ h3#map-near {
   background: #F0F1F2 url('/assets/icon-map.png') no-repeat no-repeat right center;
 }
 
-h3#top-rated-pois {
+h3#top-rated-events {
   background: #F0F1F2 url('/assets/icon-star.png') no-repeat no-repeat right center;
 }
 
@@ -69,7 +69,7 @@ h3#contribute {
   background: #F0F1F2 url('/assets/icon-ball.png') no-repeat no-repeat right center;
 }
 
-h3#last-pois {
+h3#last-events {
   background: #F0F1F2 url('/assets/icon-clock.png') no-repeat no-repeat right center;
 }
 
@@ -81,7 +81,7 @@ h3#last-pois {
   position: absolute;
 }
 
-#create-poi {
+#create-event {
   margin-bottom: 27px;
 }
 
@@ -175,7 +175,7 @@ ul#last-comments {
     display: block;
   }
   
-  .last-comment-poi {
+  .last-comment-event {
     color: #888;
     font-size: 12px;
     text-transform: uppercase;

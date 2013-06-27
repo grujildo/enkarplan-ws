@@ -35,10 +35,6 @@ class Event < ActiveRecord::Base
     Nokogiri::HTML(self.description).text if self.description
   end
   
-  def description_plain_eu
-    Nokogiri::HTML(self.description_eu).text if self.description_eu
-  end
-  
   def localized_description(locale)
     if (locale == 'eu' || locale == 'eu_ES') && self.description_eu && self.description_eu.length > 0
       self.description_eu
@@ -53,6 +49,14 @@ class Event < ActiveRecord::Base
     else
       self.title
     end
+  end
+  
+  def last_comments
+    comments.order('created_at desc').limit(10)
+  end
+  
+  def last_photos
+    photos.order('created_at desc').limit(10)
   end
   
 end

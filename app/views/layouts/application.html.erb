@@ -11,9 +11,9 @@
   <%= render partial: 'application/piwik-tracking' %>
 </head>
 <body>
-<div id="content">
-  <div class="wrapper" id="container">
-    <div id="header">
+	<div id="content">
+		
+	<div id="header" class="wrapper">
       <div id="lang-selector">
         <%= link_to 'eu', url_for(locale: 'eu') %>
         <%= link_to 'es', url_for(locale: 'es') %>
@@ -32,6 +32,8 @@
         $('#sign-in').popover({delayOut: 8000, placement: 'below', html: true, trigger: 'hover'});
       </script>
     </div>
+    
+  <div class="wrapper" id="container">
     
     <% if @identity && @identity.errors.any? %>
       <div class="error_messages">

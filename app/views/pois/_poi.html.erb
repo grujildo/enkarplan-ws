@@ -5,7 +5,7 @@
   <div class="event-content">
     <h6><%= link_to poi.localized_title(session[:locale]), poi_url(poi) %></h6>
     
-    <div class="event-rate">
+    <div class="poi-rate">
       <div class="poi-rating<%= poi.id %>" data="<%= poi.rating ? poi.rating * 2 : 0%>"></div>
       <script type="text/javascript">
         $(document).ready(function(){

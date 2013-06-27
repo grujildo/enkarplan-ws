@@ -83,8 +83,6 @@ class EventsController < ApplicationController
     if params[:event]
       @event = Event.find params[:event]
     end
-    
-    @events = @event.events.where('ends_at > ?', Time.now).order('starts_at asc')
 
     respond_to do |format|
       format.html # show.html.erb

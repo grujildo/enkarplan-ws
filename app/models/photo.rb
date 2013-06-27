@@ -3,6 +3,7 @@ class Photo < ActiveRecord::Base
     url: "/photo/:hash.:extension",
     hash_secret: "(%^{R8'PH.~12mFL#f:#5<=K*'Xx$@"
   belongs_to :poi
+  belongs_to :event
   belongs_to :user
   
   def as_json options=nil

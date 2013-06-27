@@ -7,6 +7,14 @@
  *= fullcalendar
  */
 
+@mixin linear_gradient($from: #fafafa, $to: #ececec) {
+  background-image: -webkit-gradient(linear,50% 0,50% 100%,color-stop(0%,$from),color-stop(100%,$to));
+  background-image: -webkit-linear-gradient(top,$from,$to);
+  background-image: -moz-linear-gradient(top,$from,$to);
+  background-image: -o-linear-gradient(top,$from,$to);
+  background-image: linear-gradient(top,$from,$to);
+}
+
 body {
 }
 
@@ -16,7 +24,11 @@ body {
 		}
 		
 #content {
-  background-color: #F0F1F2;
+	padding: 1px;
+	border-style: solid;
+	border-top: #3F6825;
+	border-top-width: 10px;
+  @include linear_gradient(#3d8a22,#55ad31)
 }
 
 #container {
@@ -25,6 +37,7 @@ body {
   -moz-box-shadow:rgba(0, 0, 0, 0.25) 0 0 6px 0px;
   -webkit-box-shadow:rgba(0, 0, 0, 0.25) 0 0 6px 0px;
   box-shadow:rgba(0, 0, 0, 0.25) 0 0 6px 0px;
+  margin-top: 20px;
 }
 
 .wrapper {
@@ -47,8 +60,8 @@ a {
 
 #header a.logo {
   text-indent: -9999px;
-  width: 288px;
-  height:86px;
+  width: 265px;
+  height:141px;
   background: url(/assets/logo-enkarplan.png) no-repeat center center;
   display: block;
 }
@@ -58,7 +71,7 @@ h3.title {
 }
 
 #header {
-  margin: 12px 0 17px;
+	margin-top: 20px;
 }
 
 #session {

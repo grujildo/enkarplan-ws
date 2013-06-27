@@ -36,10 +36,10 @@ class PhotosController < ApplicationController
 
     respond_to do |format|
       if @photo.save
-        format.html { redirect_to poi_url(@photo.poi) }
+        format.html { redirect_to event_url(@photo.event) }
         format.json { render json: @photo, status: :created, location: @photo }
       else
-        format.html { redirect_to poi_url(@photo.poi) }
+        format.html { redirect_to event_url(@photo.event) }
         format.json { render json: @photo.errors, status: :unprocessable_entity }
       end
     end
