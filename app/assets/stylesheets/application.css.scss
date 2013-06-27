@@ -16,6 +16,7 @@
 }
 
 body {
+	padding: 0px;
 }
 
 #calendar {
@@ -24,11 +25,8 @@ body {
 		}
 		
 #content {
-	padding: 1px;
-	border-style: solid;
-	border-top: #3F6825;
-	border-top-width: 10px;
-  @include linear_gradient(#3d8a22,#55ad31)
+	border-top: 10px solid #3F6825;
+  @include linear_gradient(#3d8a22,#55ad31);
 }
 
 #container {
@@ -91,8 +89,7 @@ h3.title {
 #footer {
   display: block;
   color: white;
-  background-color: #326f32;
-  border-top: 3px solid rgb(125, 185, 0);
+  background-color: #3f6825;
   height:  225px;
   min-width: 1010px;
   padding: 15px 0;
