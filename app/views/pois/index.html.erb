@@ -25,9 +25,6 @@
         </ul>
       </div>
     </div>
-    <div class="view-all-button">
-      <%= link_to t(:view_all), '/eventos', class: 'btn primary span3' %>
-    </div>
   
     <div id="last-added">
       <h3 id="last-pois"><%= t :last_pois %></h3>
@@ -36,6 +33,9 @@
           <%= render @last_pois %>
         </ul>
       </div>
+      <div class="view-all-button">
+      	<%= link_to t(:view_all), '/eventos', class: 'btn success span3' %>
+    	</div>
     </div>
     <div id="top-rated">
       <h3 id="top-rated-pois"><%= t :top_rated %></h3>

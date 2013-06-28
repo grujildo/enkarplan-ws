@@ -5,17 +5,17 @@ class RatingsController < ApplicationController
     @rating = Rating.new(params[:rating])
     
     #update event's rating
-    event = @rating.event
+    poi = @rating.poi
     
-    old_rating = event.rating || 0
-    old_ratings_count = event.ratings_count || 0
+    old_rating = poi.rating || 0
+    old_ratings_count = poi.ratings_count || 0
     
     new_rating = (old_rating * old_ratings_count + @rating.rating) / (old_ratings_count + 1)
     
-    event.rating = new_rating
-    event.ratings_count = old_ratings_count + 1
+    poi.rating = new_rating
+    poi.ratings_count = old_ratings_count + 1
     
-    event.update_attributes rating: new_rating, ratings_count: (old_ratings_count + 1)
+    poi.update_attributes rating: new_rating, ratings_count: (old_ratings_count + 1)
 
     respond_to do |format|
       if @rating.save

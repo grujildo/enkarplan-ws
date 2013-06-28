@@ -113,6 +113,10 @@ class PoisController < ApplicationController
       @pois = Poi.where('poi_type_id = ?', params[:type])
     end
 
+    if params[:city] && params[:city].empty?
+      @pois = @pois.where('city_id = ?', params[:city])
+    end
+    
     if params[:order] == 0
       @pois = @pois.order('created_at desc')
     else

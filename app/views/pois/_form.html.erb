@@ -70,8 +70,8 @@
      
     <div class="clearfix">
       <%= f.label t(:poi_description) %>
-      <div class="input">
-        <%= f.text_area :description, class: 'span8 rich', rows: 15 %>
+      <div class="input span8">
+        <%= f.text_area :description, class: 'rich', rows: 15 %>
       </div>
     </div>
     
@@ -202,6 +202,6 @@
   </fieldset>
   
   <div class="actions">
-    <%= f.submit t(:submit_poi), class: 'btn primary' %>
+    <%= f.submit t(:submit_poi), class: 'btn success' %>
   </div>
 <% end %>

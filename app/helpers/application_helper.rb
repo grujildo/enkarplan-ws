@@ -1,7 +1,7 @@
 module ApplicationHelper
 
   def poi_url(poi)
-    "/#{t 'resources.pois'}/#{poi.slug}"
+    "/#{t 'resources.events'}/#{poi.slug}"
   end
 
   def event_url(event)

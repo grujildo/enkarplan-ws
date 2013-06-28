@@ -39,39 +39,24 @@ img {
 h3 {
   padding-bottom: 0;
   margin-bottom: 8px;
-  background-color: #F0F1F2;
+  background-color: #3f6825;
   padding: 4px 12px;
-  color: #326f32;
+  color: #AECFA5;
   margin: 25px 0 15px -8px;
+  text-align:right;
+  position: relative;
+  text-transform:uppercase;
 }
 
-h3#last-photos {
-  background: #F0F1F2 url('/assets/icon-photos.png') no-repeat no-repeat right center;
+h3:before {
+
+  overflow: hidden;
+  width: 50%;
+  height: 6px;
+  content: '\a0';
+  background-color: #3f6825;
 }
 
-h3#map-near {
-  background: #F0F1F2 url('/assets/icon-map.png') no-repeat no-repeat right center;
-}
-
-h3#top-rated-pois {
-  background: #F0F1F2 url('/assets/icon-star.png') no-repeat no-repeat right center;
-}
-
-h3#events {
-  background: #F0F1F2 url('/assets/icon-calendar.png') no-repeat no-repeat right center;
-}
-
-h3#last-comments {
-  background: #F0F1F2 url('/assets/icon-comment.png') no-repeat no-repeat right center;
-}
-
-h3#contribute {
-  background: #F0F1F2 url('/assets/icon-ball.png') no-repeat no-repeat right center;
-}
-
-h3#last-pois {
-  background: #F0F1F2 url('/assets/icon-clock.png') no-repeat no-repeat right center;
-}
 
 #search-container {
   position: relative;

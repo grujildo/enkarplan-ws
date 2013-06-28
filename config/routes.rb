@@ -22,13 +22,16 @@ Enkarplan::Application.routes.draw do
 
   resources :comments
 
-  match '/eventos', to: 'events#all'
+  match '/eventos', to: 'pois#all'
   
-  match '/pois/last_updates', to: 'pois#last_updates'
+  match '/evento/nuevo', to: 'pois#new'
   
-  match '/events/last_updates', to: 'events#last_updates'
+  #match '/all', to: 'pois#all'
+  #match '/pois/last_updates', to: 'pois#last_updates'
   
-  match '/calendario', to: 'events#calendar'
+  match '/events/last_updates', to: 'pois#last_updates'
+  
+  match '/calendario', to: 'pois#calendar'
   
   localized do
     resources :pois
@@ -84,7 +87,7 @@ Enkarplan::Application.routes.draw do
 
   # You can have the root of your site routed with "root"
   # just remember to delete public/index.html.
-  root :to => 'events#index'
+  root :to => 'pois#index'
 
   # See how all your routes lay out with "rake routes"
 
